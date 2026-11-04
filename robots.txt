@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://shaized.github.io/sitemap.xml
