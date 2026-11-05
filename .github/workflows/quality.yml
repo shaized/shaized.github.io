@@ -1,0 +1,33 @@
+name: Website quality checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Verify search index is current
+        run: |
+          python3 maintain.py
+          git diff --exit-code -- site-index.json
+      - name: Check pages and assets
+        run: python3 check_site.py
+      - name: Check JavaScript syntax
+        run: |
+          for file in *.js *.cjs; do
+            node --check "$file"
+          done
+      - name: Check navigation and search
+        run: node test_navigation.cjs
+      - name: Check search interface behavior
+        run: node test_search_ui.cjs
+      - name: Check CISA feed behavior
+        run: node test_news.cjs
