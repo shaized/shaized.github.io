@@ -26,7 +26,7 @@
  const closeMenu=()=>{nav?.classList.remove('open');menu?.setAttribute('aria-expanded','false');menu?.setAttribute('aria-label','Open navigation');};
  menu?.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';nav.classList.toggle('open',open);menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close navigation':'Open navigation');});
  nav?.addEventListener('click',event=>{if(event.target.closest('a'))closeMenu();});
- document.addEventListener('keydown',event=>{if(event.key==='Escape'&&menu?.getAttribute('aria-expanded')==='true'){closeMenu();menu.focus();}});
+ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&menu?.getAttribute('aria-expanded')==='true'&&!document.querySelector('.nav-explore')?.open){closeMenu();menu.focus();}});
  const panel=document.querySelector('#access-panel'),opener=document.querySelector('#access-toggle');
  opener?.addEventListener('click',()=>{panel.showModal();document.body.classList.add('modal-open');});
  panel?.querySelector('[data-close-dialog]')?.addEventListener('click',()=>panel.close());
@@ -38,4 +38,11 @@
   prev?.addEventListener('click',()=>{step=Math.max(0,step-1);render();});next?.addEventListener('click',()=>{step=Math.min(stages.length-1,step+1);render();});
   demo.querySelector('[data-demo-reset]')?.addEventListener('click',()=>{step=0;render();tabs[0].focus();});
  });
+})();
+// Native details provides keyboard operation; close the navigation disclosure on dismissal.
+(()=>{
+ const explore=document.querySelector('.nav-explore');
+ if(!explore)return;
+ document.addEventListener('click',event=>{if(!explore.contains(event.target))explore.open=false;});
+ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&explore.open){explore.open=false;explore.querySelector('summary').focus();}});
 })();
