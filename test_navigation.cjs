@@ -1,0 +1,16 @@
+'use strict';
+const assert=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path');
+const {safeBackTarget,filterPages}=require('./navigation-core.js');
+const here='https://shaized.github.io/agent-threat-hunting.html';
+assert.equal(safeBackTarget('https://shaized.github.io/agents.html',here,'agents.html'),'agents.html');
+assert.equal(safeBackTarget('https://shaized.github.io/',here),'index.html');
+for(const ref of ['', 'https://evil.example/agents.html','javascript:alert(1)','https://shaized.github.io/agent-threat-hunting.html','https://shaized.github.io/private/agents.html','https://shaized.github.io/evil%2Fpath.html'])assert.equal(safeBackTarget(ref,here,'agents.html'),'agents.html');
+assert.equal(safeBackTarget('http://127.0.0.1:4173/news.html?q=private#test','http://127.0.0.1:4173/playbooks.html'),'news.html');
+const pages=JSON.parse(fs.readFileSync(path.join(__dirname,'site-index.json'),'utf8'));
+assert.equal(filterPages(pages,'').length,pages.length);
+assert.equal(filterPages(pages,'THREAT HUNTING')[0].url,'agent-threat-hunting.html');
+assert.equal(filterPages(pages,'unfindable-zzzz-1234').length,0);
+assert.equal(filterPages(pages,'<script>alert(1)</script>').length,0);
+assert(filterPages(pages,'privacy').some(p=>p.url==='privacy.html'));
+console.log('PASS: back-link origins, direct visits, self-links, nested paths, query stripping; ranked search, case handling, empty/no-match searches.');

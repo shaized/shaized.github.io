@@ -1,0 +1,20 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const data=JSON.parse(fs.readFileSync(require('node:path').join(__dirname,'kev-catalog.json'),'utf8'));
+const source=fs.readFileSync(require('node:path').join(__dirname,'news.js'),'utf8');
+class Element{constructor(tag='div'){this.tag=tag;this.value='';this.checked=false;this.children=[];this.listeners={};this.textContent='';this.disabled=false;}append(...items){this.children.push(...items);}replaceChildren(...items){this.children=items;}addEventListener(name,fn){this.listeners[name]=fn;}focus(){}scrollIntoView(){}}
+async function setup(remote){const els=new Map();const get=id=>{if(!els.has(id))els.set(id,new Element());return els.get(id);};get('date-filter').value='all';get('sort-filter').value='new';const calls=[];const ctx={document:{getElementById:get,createElement:t=>new Element(t),documentElement:{dataset:{motion:'off'}}},URL,AbortController,Date,Intl,console,setTimeout,clearTimeout,fetch:async(url,opts)=>{calls.push({url,opts});if(url==='kev-catalog.json')return{ok:true,json:async()=>structuredClone(data)};if(remote instanceof Error)throw remote;return{ok:true,json:async()=>structuredClone(remote)};}};
+ const last=source.lastIndexOf('})();');const testable=source.slice(0,last)+'globalThis.api={validate,linksFromNotes};'+source.slice(last);vm.runInNewContext(testable,ctx);for(let i=0;i<8;i++)await new Promise(setImmediate);return{get,ctx,calls};}
+(async()=>{
+ const live=await setup(data);assert.equal(live.get('catalog-count').textContent,new Intl.NumberFormat('en-US').format(data.count));assert.equal(live.get('kev-results').children.length,12);assert.equal(live.get('feed-state').textContent,'Official feed retrieved');
+ live.get('kev-search').value='CVE-2024-27834';live.get('vendor-filter').listeners.change();assert.equal(live.get('kev-results').children.length,1);assert.match(live.get('catalog-results').textContent,/1 matching entry/);assert(live.get('kev-next').disabled);
+ live.get('kev-search').value='nonexistent-zzzz';live.get('vendor-filter').listeners.change();assert.match(live.get('catalog-results').textContent,/0 matching/);
+ live.get('clear-filters').listeners.click();live.get('ransomware-filter').checked=true;live.get('ransomware-filter').listeners.change();assert(live.get('catalog-results').textContent.startsWith(new Intl.NumberFormat('en-US').format(data.vulnerabilities.filter(v=>v.knownRansomwareCampaignUse==='Known').length)));live.get('kev-next').listeners.click();assert.match(live.get('catalog-results').textContent,/Showing 13–24/);
+ const off=await setup(new Error('offline'));assert.equal(off.get('feed-state').textContent,'Live feed unavailable · snapshot shown');assert.equal(off.get('kev-results').children.length,12);
+ const bad=await setup({vulnerabilities:[]});assert.equal(bad.get('feed-state').textContent,'Live feed unavailable · snapshot shown');
+ const older=structuredClone(data);older.dateReleased='2026-10-01T00:00:00Z';const old=await setup(older);assert.equal(old.get('feed-state').textContent,'Using the newer bundled snapshot');
+ const duplicate=structuredClone(data);duplicate.vulnerabilities[1]=duplicate.vulnerabilities[0];assert.throws(()=>live.ctx.api.validate(duplicate));
+ const badDate=structuredClone(data);badDate.vulnerabilities[0].dateAdded='invalid';assert.throws(()=>live.ctx.api.validate(badDate));
+ const links=live.ctx.api.linksFromNotes('javascript:alert(1) https://user:pass@example.com https://nvd.nist.gov/vuln/detail/CVE-2024-27834');assert.equal(links.length,1);assert.equal(links[0].hostname,'nvd.nist.gov');
+ assert(live.calls.every(c=>c.opts.credentials==='omit'&&c.opts.referrerPolicy==='no-referrer'));
+ console.log('PASS: official data load, 12-item pagination, exact-CVE search, zero results, ransomware filtering, offline fallback, malformed response fallback, stale remote guard, duplicate/date validation, safe source links, credential-free requests.');
+})().catch(e=>{console.error(e);process.exitCode=1;});
