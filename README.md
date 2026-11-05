@@ -1,23 +1,25 @@
-# Cyber Fieldnotes — Shai Zaidenberg
+# Shai Zaidenberg — Security, engineered
 
-A personal cybersecurity publication and engineering portfolio, hosted at https://shaized.github.io/.
+Public website: https://shaized.github.io/
 
-## Content
-- A dated Cyber News edition with direct primary-source links and separate defensive commentary.
-- Eight general SOC AI capability profiles, covering agent services and analyst-invoked assistants.
-- Practical fieldnotes, an interactive conceptual workflow, and a reference desk.
-- A concise personal introduction. The unfinished CV is not presented as a final résumé.
+A multi-page security engineering portfolio: home, eight general AI capability walkthroughs, a searchable CISA KEV news desk, insights, resources, about, and contact.
 
-## Experience
-Responsive layouts, dark/light themes, finite animation, reduced-motion support, news filters and search, native dialogs, keyboard access, and policy pages. Assets are self-hosted; there are no trackers, third-party scripts, dependencies, or forms.
+## News data
+The news page loads `kev-catalog.json` first, then requests the official CISA mirror at `https://raw.githubusercontent.com/cisagov/kev-data/develop/known_exploited_vulnerabilities.json`. It validates the response, identifies the source and catalog release, and retains the snapshot if the remote request fails. The complete catalog is searchable and paginated. There is no background polling or private API key. CISA data is CC0. KEV is not a comprehensive cyber news wire.
 
-## Maintain
-Edit index.html for the news edition, source dates, and fieldnotes. Update the review date only after checking sources. The news section is curated and does not automatically refresh. app.js contains general agent descriptions and interactions; style.css controls appearance. Do not place internal repository details, credentials, customer data, or operational telemetry in this public repository.
+To update the fallback, replace `kev-catalog.json` with the full validated official dataset. Never edit individual entries to imply CISA endorsement. Displayed CISA due dates are source data, not universal deadlines.
 
-## Hosting
-Public GitHub Pages on main, root directory. No paid domain, backend, or hosting plan is required. Preview with `python3 -m http.server 4173 --bind 127.0.0.1`.
+## Fictional demos
+All eight walkthroughs are handcrafted illustrative scenarios, not live agent executions. They contain no internal code, customer data, or operational telemetry. Public descriptive names are used throughout.
 
-## Verification & limits
-Core contrast, local links, JavaScript syntax, and browser interactions are checked. WCAG 2.2 AA guides implementation; comprehensive accessibility conformity and legal compliance have not been certified. GitHub controls hosting logs and response headers.
+## Visuals and accessibility
+Original AI-generated conceptual imagery; original silent workflow animation with native controls and a visible transcript. No video autoplay. Keyboard navigation, native dialog, visible focus, responsive layouts, dark/light themes, and reduced motion. The accessibility panel also offers text size, contrast, spacing, link underlining, and reset. These features do not certify legal compliance or WCAG conformance.
 
-© 2026 Shai Zaidenberg. Third-party names identify source publishers, technologies, or frameworks; no endorsement is implied.
+## Privacy and maintenance
+No analytics, trackers, third-party embeds, forms, or package dependencies. Preferences stay in local storage. GitHub serves the website and CISA feed; see privacy.html. Edit HTML/CSS/JS files directly. All public assets sit at the repository root for simple GitHub Pages hosting.
+
+Preview: `python3 -m http.server 4173 --bind 127.0.0.1`.
+
+Deploy: public GitHub Pages, main branch, root directory. No paid domain or hosting plan is required.
+
+© 2026 Shai Zaidenberg. External names identify their respective services and do not imply endorsement.
