@@ -12,6 +12,9 @@ To update the fallback, replace `kev-catalog.json` with the full validated offic
 ## Fictional demos
 All eight walkthroughs are handcrafted illustrative scenarios, not live agent executions. They contain no internal code, customer data, or operational telemetry. Public descriptive names are used throughout.
 
+## Visual system and motion
+Space Grotesk headings and Manrope body text are self-hosted, with their SIL Open Font License files included. The shared header has a grouped Explore menu, GitHub/LinkedIn/email links, theme switching, and a global motion control. The homepage directly links to all 27 HTML pages. Its investigation model is conceptual, not live telemetry. Decorative CSS animation and scroll reveals respect both saved preferences and OS reduced motion. No third-party animation library is used.
+
 ## Visuals and accessibility
 Original AI-generated conceptual imagery; original silent workflow animation with native controls and a visible transcript. No video autoplay. Keyboard navigation, native dialog, visible focus, responsive layouts, dark/light themes, and reduced motion. The accessibility panel also offers text size, contrast, spacing, link underlining, and reset. These features do not certify legal compliance or WCAG conformance.
 
