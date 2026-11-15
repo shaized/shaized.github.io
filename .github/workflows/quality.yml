@@ -14,10 +14,10 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - name: Verify search index is current
+      - name: Verify search index and catalog summary are current
         run: |
           python3 maintain.py
-          git diff --exit-code -- site-index.json
+          git diff --exit-code -- site-index.json kev-summary.json
       - name: Check pages and assets
         run: python3 check_site.py
       - name: Check JavaScript syntax
@@ -31,3 +31,5 @@ jobs:
         run: node test_search_ui.cjs
       - name: Check CISA feed behavior
         run: node test_news.cjs
+      - name: Check toolkit logic and catalog summary
+        run: node test_tools.cjs
