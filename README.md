@@ -2,7 +2,7 @@
 
 [Live website](https://shaized.github.io/) · [Source repository](https://github.com/shaized/shaized.github.io)
 
-A public, buildless website with 27 pages: eight fictional AI capability demonstrations, the full CISA KEV catalog, fieldnotes, learning paths, playbooks, a glossary, resources, and professional background.
+A public, buildless website with 28 pages: eight fictional AI capability demonstrations, the full CISA KEV catalog, an Analyst Toolkit, fieldnotes, learning paths, playbooks, a glossary, resources, and professional background.
 
 ## What lives where?
 
@@ -10,7 +10,7 @@ A public, buildless website with 27 pages: eight fictional AI capability demonst
 
 **Local files are optional working copies and development artifacts:** screenshots, temporary previews, earlier design experiments, and personal source documents. They are not needed to run or maintain the published site. An unfinished CV and unrelated private information are not website assets.
 
-**In the visitor's browser:** theme and accessibility preferences stay in local storage. Page search, glossary filtering, and playbook checkboxes run in memory; no query text is sent to a server. There is no custom backend, account system, analytics, tracker, or private API key.
+**In the visitor's browser:** theme and accessibility preferences stay in local storage. Page search, glossary filtering, playbook checkboxes, and the Analyst Toolkit run in memory; no query or pasted text is sent to a server. There is no custom backend, account system, analytics, tracker, or private API key.
 
 ## Design and navigation
 
@@ -35,6 +35,7 @@ python3 check_site.py
 node test_navigation.cjs
 node test_search_ui.cjs
 node test_news.cjs
+node test_tools.cjs
 ```
 
 The `Website quality checks` workflow runs these checks and validates the search index after pushes and pull requests. It uses read-only repository permissions and does not deploy or change files. GitHub's Pages workflow performs deployment separately; quality checks are not a branch-protection gate.
@@ -47,11 +48,15 @@ python3 -m http.server 4173 --bind 127.0.0.1
 
 Then open `http://127.0.0.1:4173`. Stop the preview when finished.
 
+## Analyst Toolkit and exploitation pulse
+
+`tools.html` offers four browser-only utilities: an indicator extractor with defanging, a check of CVE IDs against the bundled KEV snapshot, a CVSS 3.1 base calculator, and a time converter. The logic lives in `tools-core.js` and is covered by `test_tools.cjs`, including published CVSS example scores. The homepage pulse section reads `kev-summary.json`, a small set of counts that `python3 maintain.py` derives from `kev-catalog.json`; it contains no figures that are not in the catalog.
+
 ## CISA data
 
 `news.js` first reads `kev-catalog.json`, then requests CISA's official public mirror at `https://raw.githubusercontent.com/cisagov/kev-data/develop/known_exploited_vulnerabilities.json`. Responses are validated; the catalog date is displayed. Offline, malformed, and older responses keep the bundled snapshot. No background polling or credentials are used. CISA data is CC0. KEV is not a comprehensive news wire, and CISA due dates are not universal remediation deadlines.
 
-To refresh the fallback, replace the complete JSON file with a validated official snapshot and run the tests. Do not invent or selectively edit entries.
+To refresh the fallback, replace the complete JSON file with a validated official snapshot, run `python3 maintain.py` to rebuild `kev-summary.json`, and run the tests. Do not invent or selectively edit entries.
 
 ## Content and assets
 

@@ -12,9 +12,11 @@ The repository is the complete, portable source of the current website. You can 
 | `theme-init.js`, `app.js`, `motion.js` | Validated preferences, accessibility, menus, demos, motion |
 | `navigation-core.js`, `navigation.js` | Tested search/back-link logic and browser interface |
 | `explore.js`, `news.js` | Learning tools and CISA catalog |
+| `tools.html`, `tools-core.js`, `tools.js` | Analyst Toolkit: tested logic and its interface |
+| `pulse.js`, `kev-summary.json` | Homepage exploitation pulse and its generated counts |
 | `site-index.json` | Generated page search data; no user data |
 | `header-template.txt`, `maintain.py` | Shared header and index maintenance |
-| `check_site.py`, `test_navigation.cjs`, `test_search_ui.cjs`, `test_news.cjs` | Portable local and GitHub quality checks |
+| `check_site.py`, `test_navigation.cjs`, `test_search_ui.cjs`, `test_news.cjs`, `test_tools.cjs` | Portable local and GitHub quality checks |
 | `.github/workflows/quality.yml` | Automated checks with read-only access |
 | `*.ttf`, `*-OFL.txt` | Fonts and redistribution licenses |
 | `*.webp`, `*.png`, `*.svg`, `*.mp4` | Public visual assets |
