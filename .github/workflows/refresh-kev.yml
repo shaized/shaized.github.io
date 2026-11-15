@@ -1,0 +1,37 @@
+name: Refresh CISA KEV snapshot
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: refresh-kev
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Download and validate the official catalog
+        run: python3 refresh_kev.py
+      - name: Rebuild derived files
+        run: python3 maintain.py
+      - name: Run the site checks before committing
+        run: |
+          python3 check_site.py
+          for file in test_*.cjs; do
+            node "$file"
+          done
+      - name: Commit the new snapshot
+        run: |
+          if git diff --quiet -- kev-catalog.json kev-summary.json; then
+            echo "Snapshot is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add kev-catalog.json kev-summary.json
+          git commit -m "Refresh CISA KEV snapshot"
+          git push

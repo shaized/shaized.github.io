@@ -7,3 +7,7 @@ This is a static educational website. Its demos do not query or modify real infr
 GitHub Pages manages hosting, HTTPS, and server headers. The site does not claim control over all response headers or certification of security, accessibility, or legal conformity. Repository/account access and future changes still need appropriate review.
 
 Quality automation uses `contents: read`, does not retain checkout credentials, and runs on pushes, pull requests, or manual dispatch. It does not use `pull_request_target`, external scan services, or deployment credentials. Visual and assistive-technology checks remain separate from code checks.
+
+One scheduled workflow, `Refresh CISA KEV snapshot`, has `contents: write` so it can commit an updated `kev-catalog.json` and `kev-summary.json`. It downloads only from CISA's official public mirror, validates the structure, refuses older or sharply smaller data, and commits only after the site checks pass. It changes no other file.
+
+The Analyst Toolkit processes pasted text in the browser, renders results as text, never executes decoded content, and sends nothing to a server.

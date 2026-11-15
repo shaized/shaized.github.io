@@ -62,7 +62,7 @@ The 404 page suggests the closest page to a mistyped address using `recover.js` 
 
 `news.js` first reads `kev-catalog.json`, then requests CISA's official public mirror at `https://raw.githubusercontent.com/cisagov/kev-data/develop/known_exploited_vulnerabilities.json`. Responses are validated; the catalog date is displayed. Offline, malformed, and older responses keep the bundled snapshot. No background polling or credentials are used. CISA data is CC0. KEV is not a comprehensive news wire, and CISA due dates are not universal remediation deadlines.
 
-To refresh the fallback, replace the complete JSON file with a validated official snapshot, run `python3 maintain.py` to rebuild `kev-summary.json`, and run the tests. Do not invent or selectively edit entries.
+The `Refresh CISA KEV snapshot` workflow runs daily: `refresh_kev.py` downloads the official mirror, validates it, refuses older or sharply smaller data, then the workflow rebuilds `kev-summary.json`, runs the checks, and commits only if they pass. To refresh by hand, run `python3 refresh_kev.py`, then `python3 maintain.py`, then the tests. Do not invent or selectively edit entries.
 
 ## Content and assets
 

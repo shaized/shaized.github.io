@@ -22,6 +22,8 @@ The repository is the complete, portable source of the current website. You can 
 | `header-template.txt`, `footer-template.txt`, `maintain.py` | Shared header, shared footer, and index maintenance |
 | `check_site.py`, `test_navigation.cjs`, `test_search_ui.cjs`, `test_news.cjs`, `test_tools.cjs` | Portable local and GitHub quality checks |
 | `.github/workflows/quality.yml` | Automated checks with read-only access |
+| `refresh_kev.py`, `.github/workflows/refresh-kev.yml` | Daily validated refresh of the KEV snapshot |
+| `dev/films/` | Recorder for the blueprint films (not used by the site) |
 | `*.ttf`, `*-OFL.txt` | Fonts and redistribution licenses |
 | `*.webp`, `*.png`, `*.svg`, `*.mp4` | Public visual assets |
 | `kev-catalog.json` | Full dated fallback from official CISA data |
