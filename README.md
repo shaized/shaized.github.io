@@ -16,6 +16,8 @@ A public, buildless website with 27 pages: eight fictional AI capability demonst
 
 The editorial masthead separates identity and social profiles from navigation. Site-wide search opens with its button or Ctrl/Command + K. Inner pages include a Back link and breadcrumbs. Back uses a same-site referring page when appropriate; direct or external visits fall back to the parent section or Home. JavaScript is not required for the fallback link.
 
+The Liquid Glass layer (`glass.css`, `glass.js`) adds translucent surfaces over a slow ambient backdrop, a floating navigation capsule, pointer-following light, staggered reveals, and page and theme transitions in both dark and light themes. It needs no external library and keeps the strict Content Security Policy unchanged.
+
 Space Grotesk and Manrope are hosted here with their SIL Open Font License files. Decorative animation respects OS reduced motion and the shared motion control. The homepage directly links to every page. See [accessibility.html](accessibility.html), [privacy.html](privacy.html), and [security.html](security.html) for scope and limitations.
 
 ## Maintain the site
