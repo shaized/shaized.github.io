@@ -94,6 +94,93 @@
   return{listed,absent};
  }
 
- const api={refang,defang,extractIndicators,cvss31,parseVector,parseTime,relativeTime,matchKev,METRICS};
+
+ // ---- Decoding helpers ----
+ const bytesToText=bytes=>{
+  let wide=bytes.length>=4&&bytes.length%2===0;
+  if(wide){let zeros=0;for(let i=1;i<bytes.length;i+=2)if(bytes[i]===0)zeros++;wide=zeros/(bytes.length/2)>.8;}
+  let text;try{text=new TextDecoder(wide?'utf-16le':'utf-8',{fatal:true}).decode(bytes);}catch{return null;}
+  const chars=[...text];if(!chars.length)return null;
+  const printable=chars.filter(ch=>/[\x20-\x7e\t\r\n -￿]/u.test(ch)).length;
+  return printable/chars.length>=.9?{text,encoding:wide?'UTF-16LE':'UTF-8'}:null;
+ };
+ const base64ToBytes=value=>{
+  let s=String(value||'').replace(/\s+/g,'').replace(/-/g,'+').replace(/_/g,'/');
+  if(!/^[A-Za-z0-9+/]+={0,2}$/.test(s))return null;
+  s=s.replace(/=+$/,'');if(s.length%4===1)return null;s+='='.repeat((4-s.length%4)%4);
+  try{return Uint8Array.from(atob(s),c=>c.charCodeAt(0));}catch{return null;}
+ };
+ // Peel URL encoding, hex, and Base64 (UTF-8 or UTF-16LE, as used by PowerShell) one layer at a time.
+ function decodeLayers(input){
+  let current=String(input||'').slice(0,MAX_INPUT).trim();const steps=[];
+  for(let i=0;i<6&&current;i++){
+   let next=null,kind=null;
+   if(/%[0-9a-f]{2}/i.test(current)){try{const decoded=decodeURIComponent(current);if(decoded!==current){next=decoded;kind='URL encoding';}}catch{}}
+   if(next===null){const hex=current.replace(/0x|\\x|[\s:,-]/gi,'');if(/^[0-9a-f]+$/i.test(hex)&&hex.length>=8&&hex.length%2===0){const r=bytesToText(Uint8Array.from(hex.match(/../g),h=>parseInt(h,16)));if(r){next=r.text;kind='Hex ('+r.encoding+')';}}}
+   if(next===null){const compact=current.replace(/\s+/g,'');if(compact.length>=8){const bytes=base64ToBytes(compact);if(bytes){const r=bytesToText(bytes);if(r){next=r.text;kind='Base64 ('+r.encoding+')';}}}}
+   if(next===null||next.trim()===current)break;
+   steps.push({kind,output:next});current=next.trim();
+  }
+  return steps;
+ }
+
+ // Read a JSON Web Token. This decodes only: it never verifies the signature.
+ function decodeJwt(token,nowMs){
+  const parts=String(token||'').trim().replace(/^Bearer\s+/i,'').split('.');
+  if(parts.length!==3)return null;
+  const read=part=>{const bytes=base64ToBytes(part);if(!bytes)return null;try{const value=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));return value&&typeof value==='object'&&!Array.isArray(value)?value:null;}catch{return null;}};
+  const header=read(parts[0]),payload=read(parts[1]);if(!header||!payload)return null;
+  const now=Number.isFinite(nowMs)?nowMs:Date.now(),times={},notes=[];
+  for(const key of['iat','nbf','exp','auth_time'])if(Number.isFinite(payload[key])&&Math.abs(payload[key]*1000)<8.64e15)times[key]=new Date(payload[key]*1000).toISOString();
+  const algorithm=typeof header.alg==='string'&&header.alg?header.alg:'not stated';
+  if(algorithm==='not stated'||algorithm.toLowerCase()==='none')notes.push('The algorithm is "none" or missing: this token is unsigned.');
+  if(!parts[2])notes.push('There is no signature segment.');
+  if(/^HS/i.test(algorithm))notes.push('Symmetric signing: anyone who holds the shared secret can create valid tokens.');
+  if(!('exp'in payload))notes.push('There is no expiry claim.');else if(times.exp&&payload.exp*1000<now)notes.push('The token has expired.');
+  if(times.nbf&&payload.nbf*1000>now)notes.push('The token is not valid yet.');
+  return{header,payload,times,notes,algorithm,signaturePresent:Boolean(parts[2])};
+ }
+
+ // ---- IPv4 networks ----
+ const ipToInt=ip=>validIPv4(ip)?ip.split('.').reduce((n,p)=>n*256+Number(p),0):null;
+ const intToIp=n=>[Math.floor(n/16777216)%256,Math.floor(n/65536)%256,Math.floor(n/256)%256,n%256].join('.');
+ const RANGES=[['10.0.0.0',8,'Private (RFC 1918)'],['172.16.0.0',12,'Private (RFC 1918)'],['192.168.0.0',16,'Private (RFC 1918)'],['127.0.0.0',8,'Loopback'],['169.254.0.0',16,'Link-local'],['100.64.0.0',10,'Shared address space (carrier-grade NAT)'],['192.0.2.0',24,'Documentation (TEST-NET-1)'],['198.51.100.0',24,'Documentation (TEST-NET-2)'],['203.0.113.0',24,'Documentation (TEST-NET-3)'],['0.0.0.0',8,'"This network"'],['224.0.0.0',4,'Multicast'],['240.0.0.0',4,'Reserved']];
+ const scopeOf=value=>{for(const[base,prefix,label]of RANGES){const size=2**(32-prefix),start=ipToInt(base);if(value>=start&&value<start+size)return label;}return'Public (globally routable)';};
+ function cidrInfo(input){
+  const m=String(input||'').trim().match(/^(\d{1,3}(?:\.\d{1,3}){3})(?:\s*\/\s*(\d{1,2}))?$/);if(!m)return null;
+  const ip=ipToInt(m[1]),prefix=m[2]===undefined?32:Number(m[2]);if(ip===null||prefix>32)return null;
+  const total=2**(32-prefix),network=Math.floor(ip/total)*total,broadcast=network+total-1,small=prefix>=31;
+  return{address:m[1],prefix,network:intToIp(network),broadcast:intToIp(broadcast),first:intToIp(small?network:network+1),last:intToIp(small?broadcast:broadcast-1),mask:intToIp(2**32-total),wildcard:intToIp(total-1),total,usable:small?total:total-2,scope:scopeOf(ip),start:network,end:broadcast};
+ }
+ const cidrContains=(cidr,ip)=>{const info=cidrInfo(cidr),value=ipToInt(String(ip||'').trim());return info&&value!==null?value>=info.start&&value<=info.end:null;};
+
+ // ---- Email headers ----
+ function parseEmailHeaders(raw){
+  const text=String(raw||'').slice(0,MAX_INPUT).replace(/\r\n?/g,'\n').replace(/^\s+/,'');
+  const unfolded=text.split(/\n\n/)[0].replace(/\n[ \t]+/g,' '),headers=[];
+  for(const line of unfolded.split('\n')){const m=line.match(/^([A-Za-z0-9-]+):\s*(.*)$/);if(m)headers.push([m[1].toLowerCase(),m[2].trim()]);}
+  if(headers.length<2)return null;
+  const first=name=>(headers.find(h=>h[0]===name)||[])[1]||'',all=name=>headers.filter(h=>h[0]===name).map(h=>h[1]);
+  const address=value=>{const m=value.match(/<([^<>\s]+@[^<>\s]+)>/)||value.match(/([^\s<>"]+@[^\s<>"]+)/);return m?m[1].toLowerCase():'';};
+  const domain=value=>address(value).split('@')[1]||'';
+  const related=(a,b)=>a===b||a.endsWith('.'+b)||b.endsWith('.'+a);
+  const results=all('authentication-results').join(' ; '),auth={};
+  for(const mechanism of['spf','dkim','dmarc']){const m=results.match(new RegExp('\\b'+mechanism+'=([a-z]+)','i'));auth[mechanism]=m?m[1].toLowerCase():'not stated';}
+  if(auth.spf==='not stated'){const m=first('received-spf').match(/^([a-z]+)/i);if(m)auth.spf=m[1].toLowerCase();}
+  const hops=all('received').reverse().map(value=>{
+   const from=(value.match(/\bfrom\s+([^\s;()]+)/i)||[])[1]||'',by=(value.match(/\bby\s+([^\s;()]+)/i)||[])[1]||'';
+   const ip=(value.match(/[\[(](\d{1,3}(?:\.\d{1,3}){3})[\])]/)||[])[1]||'',stamp=Date.parse(value.slice(value.lastIndexOf(';')+1).replace(/\([^)]*\)/g,'').trim());
+   return{from,by,ip:validIPv4(ip)?ip:'',time:Number.isFinite(stamp)?new Date(stamp).toISOString():''};
+  });
+  hops.forEach((hop,i)=>{const previous=hops[i-1];hop.delaySeconds=i&&hop.time&&previous.time?Math.round((Date.parse(hop.time)-Date.parse(previous.time))/1000):null;});
+  const fromDomain=domain(first('from')),replyDomain=domain(first('reply-to')),returnDomain=domain(first('return-path')),flags=[];
+  if(replyDomain&&fromDomain&&!related(replyDomain,fromDomain))flags.push(`Reply-To domain (${replyDomain}) differs from the From domain (${fromDomain}).`);
+  if(returnDomain&&fromDomain&&!related(returnDomain,fromDomain))flags.push(`Return-Path domain (${returnDomain}) differs from the From domain (${fromDomain}). This is common for bulk mail services and worth checking for direct mail.`);
+  for(const mechanism of['spf','dkim','dmarc'])if(['fail','softfail','permerror','temperror','none'].includes(auth[mechanism]))flags.push(`${mechanism.toUpperCase()} result is "${auth[mechanism]}".`);
+  if(!results)flags.push('No Authentication-Results header was found, so SPF, DKIM, and DMARC outcomes are unknown.');
+  return{from:first('from'),fromAddress:address(first('from')),replyTo:first('reply-to'),returnPath:first('return-path'),subject:first('subject'),date:first('date'),messageId:first('message-id'),auth,hops,flags};
+ }
+
+ const api={refang,defang,extractIndicators,cvss31,parseVector,parseTime,relativeTime,matchKev,METRICS,decodeLayers,decodeJwt,cidrInfo,cidrContains,parseEmailHeaders};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else scope.SZTools=api;
 })(globalThis);

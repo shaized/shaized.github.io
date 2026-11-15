@@ -14,8 +14,12 @@ The repository is the complete, portable source of the current website. You can 
 | `explore.js`, `news.js` | Learning tools and CISA catalog |
 | `tools.html`, `tools-core.js`, `tools.js` | Analyst Toolkit: tested logic and its interface |
 | `pulse.js`, `kev-summary.json` | Homepage exploitation pulse and its generated counts |
+| `blueprints.html`, `blueprints.js` | Architecture diagrams (inline SVG) and their step-through control |
+| `film-*.mp4`, `film-*.webp` | Silent recordings of the four diagrams and their posters |
+| `recover.js` | Closest-page suggestions on the 404 page |
+| `favicon.ico`, `favicon.svg`, `apple-touch-icon.png` | Browser and home-screen icons |
 | `site-index.json` | Generated page search data; no user data |
-| `header-template.txt`, `maintain.py` | Shared header and index maintenance |
+| `header-template.txt`, `footer-template.txt`, `maintain.py` | Shared header, shared footer, and index maintenance |
 | `check_site.py`, `test_navigation.cjs`, `test_search_ui.cjs`, `test_news.cjs`, `test_tools.cjs` | Portable local and GitHub quality checks |
 | `.github/workflows/quality.yml` | Automated checks with read-only access |
 | `*.ttf`, `*-OFL.txt` | Fonts and redistribution licenses |
@@ -30,9 +34,13 @@ Use a related HTML page as the starting point. Set a unique title, description, 
 
 `glass.css` loads last and overrides the shared colour tokens (`--surface`, `--raised`, `--line`) with translucent values, so existing components become glass without per-page edits. Blur is limited to the navigation capsule, menus, dialogs, and the hero panel to keep scrolling smooth. `glass.js` is decorative only: the site works without it. Higher contrast, reduced transparency, paused motion, and print each fall back to solid surfaces. When you change any CSS or JavaScript file, raise the `?v=` number in every page so browsers fetch the new copy.
 
+## Diagrams and films
+
+Each diagram is an inline SVG in `blueprints.html`. Elements carry a `data-step` number that matches the step buttons and captions beneath it, so a change to a diagram needs the same change in its caption list. The films are recordings of these diagrams: if a diagram changes, re-record its film and poster or remove the film, so the two do not disagree. Keep the transcript under each video in step with its captions.
+
 ## Navigation updates
 
-Edit `header-template.txt`, then run `python3 maintain.py --header`. This applies the header to all pages and sets the primary navigation's active state. The homepage is not a hidden master template for other content. Edit page bodies directly.
+Edit `header-template.txt` or `footer-template.txt`, then run `python3 maintain.py --header`. This applies the header and footer to all pages and sets the primary navigation's active state. The homepage is not a hidden master template for other content. Edit page bodies directly.
 
 ## Publishing and rollback
 

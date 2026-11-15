@@ -2,7 +2,7 @@
 
 [Live website](https://shaized.github.io/) · [Source repository](https://github.com/shaized/shaized.github.io)
 
-A public, buildless website with 28 pages: eight fictional AI capability demonstrations, the full CISA KEV catalog, an Analyst Toolkit, fieldnotes, learning paths, playbooks, a glossary, resources, and professional background.
+A public, buildless website with 29 pages: eight fictional AI capability demonstrations, the full CISA KEV catalog, twelve response playbooks, a nine-tool Analyst Toolkit, animated architecture blueprints with short films, fieldnotes, learning paths, playbooks, a glossary, resources, and professional background.
 
 ## What lives where?
 
@@ -25,7 +25,7 @@ Space Grotesk and Manrope are hosted here with their SIL Open Font License files
 The committed HTML files are the source. There is no hidden build step or dependency installation.
 
 1. Edit the relevant HTML, CSS, or JavaScript file.
-2. For a shared navigation change, edit `header-template.txt` and run `python3 maintain.py --header`.
+2. For a shared navigation or footer change, edit `header-template.txt` or `footer-template.txt` and run `python3 maintain.py --header`.
 3. For content changes, run `python3 maintain.py` to regenerate `site-index.json`.
 4. Run the checks below, then commit the changed files to `main`.
 5. Confirm the Pages deployment succeeded and inspect the live result.
@@ -50,7 +50,13 @@ Then open `http://127.0.0.1:4173`. Stop the preview when finished.
 
 ## Analyst Toolkit and exploitation pulse
 
-`tools.html` offers four browser-only utilities: an indicator extractor with defanging, a check of CVE IDs against the bundled KEV snapshot, a CVSS 3.1 base calculator, and a time converter. The logic lives in `tools-core.js` and is covered by `test_tools.cjs`, including published CVSS example scores. The homepage pulse section reads `kev-summary.json`, a small set of counts that `python3 maintain.py` derives from `kev-catalog.json`; it contains no figures that are not in the catalog.
+`tools.html` offers nine browser-only utilities: an indicator extractor with defanging, a check of CVE IDs against the bundled KEV snapshot, a CVSS 3.1 base calculator, a time converter, a layered decoder, a JWT reader, a CIDR calculator, a hash calculator, and an email header analyzer. The logic lives in `tools-core.js` and is covered by `test_tools.cjs`, including published CVSS example scores. The homepage pulse section reads `kev-summary.json`, a small set of counts that `python3 maintain.py` derives from `kev-catalog.json`; it contains no figures that are not in the catalog.
+
+## Playbooks, blueprints, and films
+
+`playbooks.html` holds twelve original checklists written from public guidance (NIST SP 800-61, CISA, RFC 3227, OWASP). They contain no private or organization-specific procedures. `blueprints.html` presents four generic reference architectures as inline SVG diagrams that `blueprints.js` steps through; every caption is also plain text on the page. The four `film-*.mp4` files are silent screen recordings of those diagrams with `film-*.webp` posters and written transcripts. They never autoplay.
+
+The 404 page suggests the closest page to a mistyped address using `recover.js` and the tested `suggestPages` function in `navigation-core.js`.
 
 ## CISA data
 

@@ -44,6 +44,10 @@
  // Replay the short entrance when the investigation model text changes.
  ['#model-word','#model-detail'].forEach(selector=>{const el=document.querySelector(selector);if(!el)return;new MutationObserver(()=>{el.classList.remove('is-swapped');void el.offsetWidth;el.classList.add('is-swapped');}).observe(el,{childList:true,characterData:true,subtree:true});});
 
+ // Playbook progress bar, driven by the same checkboxes the page already counts.
+ const paintProgress=panel=>{const checks=panel.querySelectorAll('[data-playbook-check]'),bar=panel.querySelector('.playbook-bottom');if(bar&&checks.length)bar.style.setProperty('--progress',(panel.querySelectorAll('[data-playbook-check]:checked').length/checks.length*100).toFixed(1)+'%');};
+ document.querySelectorAll('[data-playbook-panel]').forEach(panel=>{panel.addEventListener('change',()=>paintProgress(panel));panel.querySelector('[data-playbook-reset]')?.addEventListener('click',()=>requestAnimationFrame(()=>paintProgress(panel)));paintProgress(panel);});
+
  // Theme change expands from the toggle. The original handler still performs the change.
  const themeButton=document.querySelector('#theme-toggle');let replaying=false;
  if(themeButton&&typeof document.startViewTransition==='function'){

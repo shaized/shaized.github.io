@@ -18,7 +18,7 @@ async function setup(response=data){
  return{ids,calls,keys};
 }
 (async()=>{
- const live=await setup();const get=id=>live.ids.get('#'+id);assert(get('site-search-dialog').open);assert(get('site-search-input').focused);assert.equal(get('site-search-results').children.length,28);assert.equal(live.calls[0].url,'https://shaized.github.io/site-index.json');assert.equal(live.calls[0].opts.credentials,'omit');
+ const live=await setup();const get=id=>live.ids.get('#'+id);assert(get('site-search-dialog').open);assert(get('site-search-input').focused);assert.equal(get('site-search-results').children.length,JSON.parse(require('node:fs').readFileSync(require('node:path').join(__dirname,'site-index.json'),'utf8')).length);assert.equal(live.calls[0].url,'https://shaized.github.io/site-index.json');assert.equal(live.calls[0].opts.credentials,'omit');
  get('site-search-input').value='threat hunting';get('site-search-input').listeners.input();assert.equal(get('site-search-results').children[0].href,'https://shaized.github.io/agent-threat-hunting.html');assert.equal(live.calls.length,1);
  get('site-search-input').value='no-match-zzzz';get('site-search-input').listeners.input();assert.equal(get('site-search-results').children.length,0);assert.match(get('site-search-status').textContent,/No pages found/);
  get('close-site-search').click();assert(!get('site-search-dialog').open);assert(get('site-search-toggle').focused);

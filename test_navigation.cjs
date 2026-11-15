@@ -1,7 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path');
-const {safeBackTarget,filterPages}=require('./navigation-core.js');
+const {safeBackTarget,filterPages,suggestPages}=require('./navigation-core.js');
 const here='https://shaized.github.io/agent-threat-hunting.html';
 assert.equal(safeBackTarget('https://shaized.github.io/agents.html',here,'agents.html'),'agents.html');
 assert.equal(safeBackTarget('https://shaized.github.io/',here),'index.html');
@@ -13,4 +13,10 @@ assert.equal(filterPages(pages,'THREAT HUNTING')[0].url,'agent-threat-hunting.ht
 assert.equal(filterPages(pages,'unfindable-zzzz-1234').length,0);
 assert.equal(filterPages(pages,'<script>alert(1)</script>').length,0);
 assert(filterPages(pages,'privacy').some(p=>p.url==='privacy.html'));
-console.log('PASS: back-link origins, direct visits, self-links, nested paths, query stripping; ranked search, case handling, empty/no-match searches.');
+const top=p=>(suggestPages(p,pages)[0]||{}).url;
+assert.equal(top('/tool'),'tools.html');assert.equal(top('/playbook.html'),'playbooks.html');assert.equal(top('/Glossery'),'glossary.html');
+assert.equal(top('/blog/threat-hunting'),'agent-threat-hunting.html');assert.equal(top('/blueprint'),'blueprints.html');assert.equal(top('/contact-me.html'),'contact.html');
+assert.equal(top('/news.htm'),'news.html');assert.equal(top('/agent-alert-triage'),'agent-alert-triage.html');
+for(const none of['/','','/x','/zzzz-qqqq-9999','/%E0%A4%A','/<script>alert(1)</script>'])assert.deepEqual(suggestPages(none,pages),[],none);
+assert.ok(suggestPages('/agent',pages).length<=3);
+console.log('PASS: back-link origins, direct visits, self-links, nested paths, query stripping; ranked search, case handling, empty/no-match searches; page suggestions for mistyped addresses.');
