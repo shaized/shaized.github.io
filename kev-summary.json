@@ -1,10 +1,10 @@
 {
- "dateReleased": "2026-11-18T19:17:41.0354Z",
- "catalogVersion": "2026.11.18",
- "count": 1786,
+ "dateReleased": "2026-11-20T17:48:39.1516Z",
+ "catalogVersion": "2026.11.20",
+ "count": 1790,
  "ransomware": 361,
- "added30": 38,
- "added90": 113,
+ "added30": 36,
+ "added90": 116,
  "vendorCount": 298,
  "vendors": [
   {
@@ -13,7 +13,7 @@
   },
   {
    "name": "Cisco",
-   "count": 103
+   "count": 104
   },
   {
    "name": "Apple",
@@ -33,7 +33,7 @@
   },
   {
    "name": "Apache",
-   "count": 42
+   "count": 43
   },
   {
    "name": "Ivanti",
@@ -87,10 +87,42 @@
   },
   {
    "month": "2026-11",
-   "count": 20
+   "count": 24
   }
  ],
  "latest": [
+  {
+   "cveID": "CVE-2026-76466",
+   "vendor": "Cisco",
+   "product": "Expressway Series",
+   "name": "Cisco Expressway Series Use of Hard-coded Credentials Vulnerability",
+   "dateAdded": "2026-11-20",
+   "ransomware": false
+  },
+  {
+   "cveID": "CVE-2026-129448",
+   "vendor": "Apache",
+   "product": "Roller",
+   "name": "Apache Roller Deserialization of Untrusted Data Vulnerability",
+   "dateAdded": "2026-11-20",
+   "ransomware": false
+  },
+  {
+   "cveID": "CVE-2026-123890",
+   "vendor": "Broadcom",
+   "product": "VMware vCenter",
+   "name": "VMWare vCenter Authentication Bypass Using an Alternate Path or Channel Vulnerability",
+   "dateAdded": "2026-11-20",
+   "ransomware": false
+  },
+  {
+   "cveID": "CVE-2025-42884",
+   "vendor": "SAP",
+   "product": "NetWeaver",
+   "name": "SAP NetWeaver Improper Neutralization of Special Elements in Data Query Logic Vulnerability",
+   "dateAdded": "2026-11-20",
+   "ransomware": false
+  },
   {
    "cveID": "CVE-2026-90817",
    "vendor": "Vanderbilt University",
@@ -105,38 +137,6 @@
    "product": "Axis",
    "name": "Apache Axis Unsafe Reflection Vulnerability",
    "dateAdded": "2026-11-18",
-   "ransomware": false
-  },
-  {
-   "cveID": "CVE-2026-40217",
-   "vendor": "BerriAI",
-   "product": "LiteLLM",
-   "name": "BerriAI LiteLLM Unprotected Alternate Channel Vulnerability",
-   "dateAdded": "2026-11-18",
-   "ransomware": false
-  },
-  {
-   "cveID": "CVE-2024-10441",
-   "vendor": "Synology",
-   "product": "DiskStation Manager (DSM)",
-   "name": "Synology DiskStation Manager (DSM) Improper Encoding or Escaping of Output Vulnerability",
-   "dateAdded": "2026-11-18",
-   "ransomware": false
-  },
-  {
-   "cveID": "CVE-2026-115731",
-   "vendor": "Perforce",
-   "product": "Puppet Enterprise",
-   "name": "Perforce Puppet Enterprise Deserialization of Untrusted Data Vulnerability",
-   "dateAdded": "2026-11-17",
-   "ransomware": false
-  },
-  {
-   "cveID": "CVE-2026-123039",
-   "vendor": "Check Point",
-   "product": "Multiple Products",
-   "name": "Check Point Multiple Products Incorrect Permission Assignment for Critical Resource Vulnerability",
-   "dateAdded": "2026-11-13",
    "ransomware": false
   }
  ]
