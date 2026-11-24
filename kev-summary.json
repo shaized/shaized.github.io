@@ -1,11 +1,11 @@
 {
- "dateReleased": "2026-11-20T17:48:39.1516Z",
- "catalogVersion": "2026.11.20",
- "count": 1790,
- "ransomware": 361,
+ "dateReleased": "2026-11-23T19:43:55.7979Z",
+ "catalogVersion": "2026.11.23",
+ "count": 1792,
+ "ransomware": 362,
  "added30": 36,
  "added90": 116,
- "vendorCount": 298,
+ "vendorCount": 299,
  "vendors": [
   {
    "name": "Microsoft",
@@ -87,10 +87,26 @@
   },
   {
    "month": "2026-11",
-   "count": 24
+   "count": 26
   }
  ],
  "latest": [
+  {
+   "cveID": "CVE-2026-134624",
+   "vendor": "N-able",
+   "product": "MailAssure",
+   "name": "N-able MailAssure (SpamExperts) Server-Side Request Forgery (SSRF) Vulnerability",
+   "dateAdded": "2026-11-23",
+   "ransomware": false
+  },
+  {
+   "cveID": "CVE-2026-133968",
+   "vendor": "Project MONAI",
+   "product": "MONAI Label",
+   "name": "Project MONAI MONAI Label Path Traversal Vulnerability",
+   "dateAdded": "2026-11-23",
+   "ransomware": false
+  },
   {
    "cveID": "CVE-2026-76466",
    "vendor": "Cisco",
@@ -121,22 +137,6 @@
    "product": "NetWeaver",
    "name": "SAP NetWeaver Improper Neutralization of Special Elements in Data Query Logic Vulnerability",
    "dateAdded": "2026-11-20",
-   "ransomware": false
-  },
-  {
-   "cveID": "CVE-2026-90817",
-   "vendor": "Vanderbilt University",
-   "product": "Research Electronic Data Capture (REDCap)",
-   "name": "Vanderbilt University Research Electronic Data Capture (REDCap) Code Injection Vulnerability",
-   "dateAdded": "2026-11-18",
-   "ransomware": false
-  },
-  {
-   "cveID": "CVE-2026-90436",
-   "vendor": "Apache",
-   "product": "Axis",
-   "name": "Apache Axis Unsafe Reflection Vulnerability",
-   "dateAdded": "2026-11-18",
    "ransomware": false
   }
  ]
