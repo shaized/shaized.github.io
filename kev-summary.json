@@ -1,11 +1,11 @@
 {
- "dateReleased": "2026-11-23T19:43:55.7979Z",
- "catalogVersion": "2026.11.23",
- "count": 1792,
+ "dateReleased": "2026-11-24T17:47:46.199Z",
+ "catalogVersion": "2026.11.24",
+ "count": 1795,
  "ransomware": 362,
- "added30": 36,
- "added90": 116,
- "vendorCount": 299,
+ "added30": 39,
+ "added90": 113,
+ "vendorCount": 301,
  "vendors": [
   {
    "name": "Microsoft",
@@ -87,10 +87,34 @@
   },
   {
    "month": "2026-11",
-   "count": 26
+   "count": 29
   }
  ],
  "latest": [
+  {
+   "cveID": "CVE-2026-132224",
+   "vendor": "Optimizely",
+   "product": "Web Experimentation",
+   "name": "Optimizely Web Experimentation External Control of Critical State Data Vulnerability",
+   "dateAdded": "2026-11-24",
+   "ransomware": false
+  },
+  {
+   "cveID": "CVE-2026-132165",
+   "vendor": "Drupal",
+   "product": "Core",
+   "name": "Drupal Core Remote Code Execution Vulnerability",
+   "dateAdded": "2026-11-24",
+   "ransomware": false
+  },
+  {
+   "cveID": "CVE-2026-131914",
+   "vendor": "Idunno",
+   "product": "AntiCsrf",
+   "name": "Idunno AntiCsrf Deserialization of Untrusted Data Vulnerability",
+   "dateAdded": "2026-11-24",
+   "ransomware": false
+  },
   {
    "cveID": "CVE-2026-134624",
    "vendor": "N-able",
@@ -112,30 +136,6 @@
    "vendor": "Cisco",
    "product": "Expressway Series",
    "name": "Cisco Expressway Series Use of Hard-coded Credentials Vulnerability",
-   "dateAdded": "2026-11-20",
-   "ransomware": false
-  },
-  {
-   "cveID": "CVE-2026-129448",
-   "vendor": "Apache",
-   "product": "Roller",
-   "name": "Apache Roller Deserialization of Untrusted Data Vulnerability",
-   "dateAdded": "2026-11-20",
-   "ransomware": false
-  },
-  {
-   "cveID": "CVE-2026-123890",
-   "vendor": "Broadcom",
-   "product": "VMware vCenter",
-   "name": "VMWare vCenter Authentication Bypass Using an Alternate Path or Channel Vulnerability",
-   "dateAdded": "2026-11-20",
-   "ransomware": false
-  },
-  {
-   "cveID": "CVE-2025-42884",
-   "vendor": "SAP",
-   "product": "NetWeaver",
-   "name": "SAP NetWeaver Improper Neutralization of Special Elements in Data Query Logic Vulnerability",
    "dateAdded": "2026-11-20",
    "ransomware": false
   }
