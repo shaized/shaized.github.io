@@ -1,11 +1,11 @@
 {
- "dateReleased": "2026-11-24T17:47:46.199Z",
- "catalogVersion": "2026.11.24",
- "count": 1795,
+ "dateReleased": "2026-11-25T19:48:12.4344Z",
+ "catalogVersion": "2026.11.25",
+ "count": 1805,
  "ransomware": 362,
- "added30": 39,
- "added90": 113,
- "vendorCount": 301,
+ "added30": 47,
+ "added90": 120,
+ "vendorCount": 303,
  "vendors": [
   {
    "name": "Microsoft",
@@ -87,56 +87,56 @@
   },
   {
    "month": "2026-11",
-   "count": 29
+   "count": 39
   }
  ],
  "latest": [
   {
-   "cveID": "CVE-2026-132224",
-   "vendor": "Optimizely",
-   "product": "Web Experimentation",
-   "name": "Optimizely Web Experimentation External Control of Critical State Data Vulnerability",
-   "dateAdded": "2026-11-24",
+   "cveID": "CVE-2026-133469",
+   "vendor": "Vates",
+   "product": "Xen Orchestra",
+   "name": "Vates Xen Orchestra Improper Validation of Specified Type of Input Vulnerability",
+   "dateAdded": "2026-11-25",
    "ransomware": false
   },
   {
-   "cveID": "CVE-2026-132165",
-   "vendor": "Drupal",
-   "product": "Core",
-   "name": "Drupal Core Remote Code Execution Vulnerability",
-   "dateAdded": "2026-11-24",
+   "cveID": "CVE-2026-133324",
+   "vendor": "Mitel",
+   "product": "MiCollab",
+   "name": "Mitel MiCollab Not Failing Securely Vulnerability",
+   "dateAdded": "2026-11-25",
    "ransomware": false
   },
   {
-   "cveID": "CVE-2026-131914",
-   "vendor": "Idunno",
-   "product": "AntiCsrf",
-   "name": "Idunno AntiCsrf Deserialization of Untrusted Data Vulnerability",
-   "dateAdded": "2026-11-24",
+   "cveID": "CVE-2026-133323",
+   "vendor": "Mitel",
+   "product": "MiCollab",
+   "name": "Mitel MiCollab OS Command Injection Vulnerability",
+   "dateAdded": "2026-11-25",
    "ransomware": false
   },
   {
-   "cveID": "CVE-2026-134624",
-   "vendor": "N-able",
-   "product": "MailAssure",
-   "name": "N-able MailAssure (SpamExperts) Server-Side Request Forgery (SSRF) Vulnerability",
-   "dateAdded": "2026-11-23",
+   "cveID": "CVE-2026-133311",
+   "vendor": "Mitel",
+   "product": "MiCollab",
+   "name": "Mitel MiCollab Weak Authentication Vulnerability",
+   "dateAdded": "2026-11-25",
    "ransomware": false
   },
   {
-   "cveID": "CVE-2026-133968",
-   "vendor": "Project MONAI",
-   "product": "MONAI Label",
-   "name": "Project MONAI MONAI Label Path Traversal Vulnerability",
-   "dateAdded": "2026-11-23",
+   "cveID": "CVE-2026-133303",
+   "vendor": "Mitel",
+   "product": "MiCollab",
+   "name": "Mitel MiCollab XML Injection Vulnerability",
+   "dateAdded": "2026-11-25",
    "ransomware": false
   },
   {
-   "cveID": "CVE-2026-76466",
-   "vendor": "Cisco",
-   "product": "Expressway Series",
-   "name": "Cisco Expressway Series Use of Hard-coded Credentials Vulnerability",
-   "dateAdded": "2026-11-20",
+   "cveID": "CVE-2026-133275",
+   "vendor": "Mitel",
+   "product": "MiCollab",
+   "name": "Mitel MiCollab Unrestricted Upload of File with Dangerous Type Vulnerability",
+   "dateAdded": "2026-11-25",
    "ransomware": false
   }
  ]
